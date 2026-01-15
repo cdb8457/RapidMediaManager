@@ -8,9 +8,8 @@ class QbittorrentConfig(BaseSettings):
     username: str = "admin"
     password: str = "admin"  # noqa: S105
     enabled: bool = False
-
     category_name: str = "MediaManager"
-    category_save_path: str = ""  # e.g."/data/torrents/mediamanager", it has to be the same directory as the torrent_directory, but from QBittorrent's container
+    category_save_path: str = ""
 
 
 class TransmissionConfig(BaseSettings):
@@ -33,7 +32,18 @@ class SabnzbdConfig(BaseSettings):
     base_path: str = "/api"
 
 
+class DecypharrConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="DECYPHARR_")
+    base_url: str = "http://localhost:8282"
+    username: str = ""
+    password: str = ""
+    enabled: bool = False
+    category_name: str = "MediaManager"
+    category_save_path: str = ""
+
+
 class TorrentConfig(BaseSettings):
     qbittorrent: QbittorrentConfig = QbittorrentConfig()
     transmission: TransmissionConfig = TransmissionConfig()
     sabnzbd: SabnzbdConfig = SabnzbdConfig()
+    decypharr: DecypharrConfig = DecypharrConfig()
