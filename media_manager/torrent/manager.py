@@ -11,6 +11,7 @@ from media_manager.torrent.download_clients.sabnzbd import SabnzbdDownloadClient
 from media_manager.torrent.download_clients.transmission import (
     TransmissionDownloadClient,
 )
+from media_manager.torrent.download_clients.decypharr import DecypharrDownloadClient  # ADD THIS LINE
 from media_manager.torrent.schemas import Torrent, TorrentStatus
 
 log = logging.getLogger(__name__)
@@ -39,8 +40,18 @@ class DownloadManager:
     def _initialize_clients(self) -> None:
         """Initialize and register the default download clients"""
 
-        # Initialize torrent clients (prioritize qBittorrent, fallback to Transmission)
-        if self.config.qbittorrent.enabled:
+        # Initialize torrent clients (prioritize Decypharr, then qBittorrent, fallback to Transmission)
+        
+        # Try Decypharr first (Real-Debrid integration)
+        if self.config.decypharr.enabled:
+            try:
+                self._torrent_client = DecypharrDownloadClient()
+                log.info("Initialized Decypharr client for Real-Debrid")
+            except Exception as e:
+                log.error(f"Failed to initialize Decypharr client: {e}")
+        
+        # If Decypharr is not available, try qBittorrent
+        if self._torrent_client is None and self.config.qbittorrent.enabled:
             try:
                 self._torrent_client = QbittorrentDownloadClient()
             except Exception as e:
