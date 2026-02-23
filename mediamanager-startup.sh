@@ -107,6 +107,14 @@ ASCII_ART='
 display_cool_text "$ASCII_ART"
 echo "Buy me a coffee at https://buymeacoffee.com/maxdorninger"
 
+PUID=${PUID:-99}
+PGID=${PGID:-100}
+
+echo "Applying PUID: $PUID and PGID: $PGID"
+groupmod -o -g "$PGID" mediamanager || true
+usermod -o -u "$PUID" mediamanager || true
+chown -R mediamanager:mediamanager /app /home/mediamanager || true
+
 # Initialize config if it doesn't exist
 CONFIG_DIR=${CONFIG_DIR:-/app/config}
 CONFIG_FILE="$CONFIG_DIR/config.toml"
@@ -119,6 +127,7 @@ if [ ! -d "$CONFIG_DIR" ]; then
     echo "Creating config directory: $CONFIG_DIR"
     mkdir -p "$CONFIG_DIR"
 fi
+chown -R mediamanager:mediamanager "$CONFIG_DIR" || true
 
 # Copy example config if config.toml doesn't exist
 if [ ! -f "$CONFIG_FILE" ]; then
@@ -137,7 +146,7 @@ else
 fi
 
 echo "Running DB migrations..."
-uv run alembic upgrade head
+gosu mediamanager uv run alembic upgrade head
 
 echo "Starting MediaManager backend service..."
 echo ""
@@ -152,7 +161,7 @@ DEVELOPMENT_MODE=${MEDIAMANAGER_MISC__DEVELOPMENT:-FALSE}
 PORT=${PORT:-8000}
 if [ "$DEVELOPMENT_MODE" == "TRUE" ]; then
     echo "Development mode is enabled, enabling auto-reload..."
-    uv run fastapi run /app/media_manager/main.py --port "$PORT" --proxy-headers --reload
+    exec gosu mediamanager uv run fastapi run /app/media_manager/main.py --host 0.0.0.0 --port "$PORT" --proxy-headers --reload
 else
-  uv run fastapi run /app/media_manager/main.py --port "$PORT" --proxy-headers
+    exec gosu mediamanager uv run fastapi run /app/media_manager/main.py --host 0.0.0.0 --port "$PORT" --proxy-headers
 fi
