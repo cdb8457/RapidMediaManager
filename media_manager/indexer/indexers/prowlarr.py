@@ -9,6 +9,9 @@ from media_manager.indexer.indexers.torznab_mixin import TorznabMixin
 from media_manager.indexer.schemas import IndexerQueryResult
 from media_manager.movies.schemas import Movie
 from media_manager.tv.schemas import Show
+from media_manager.indexer.flaresolverr_proxy import FlaresolverrAPI
+from media_manager.movies.schemas import Movie
+from media_manager.tv.schemas import Show
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +44,45 @@ class Prowlarr(GenericIndexer, TorznabMixin):
     def _call_prowlarr_api(self, path: str, parameters: dict | None = None) -> Response:
         url = f"{self.config.url}/api/v1{path}"
         headers = {"X-Api-Key": self.config.api_key}
+        
+        # Build the full URL with parameters for FlareSolverr
+        if parameters:
+            import urllib.parse
+            query_string = urllib.parse.urlencode(parameters)
+            full_url = f"{url}?{query_string}"
+        else:
+            full_url = url
+            
+        decypharr_config = MediaManagerConfig().indexers.decypharr
+        
+        if decypharr_config.enabled:
+            log.info(f"Decypharr Proxy Enabled. Routing request through Flaresolverr: {full_url}")
+            proxy = FlaresolverrAPI(host_url=decypharr_config.url)
+            
+            # Note: Flaresolverr currently ignores custom headers in simple GET requests unless
+            # strictly passed in the CMD. For Prowlarr API interactions, we append the API key to the query string
+            if parameters is None:
+                full_url = f"{full_url}?apikey={self.config.api_key}"
+            else:
+                 full_url = f"{full_url}&apikey={self.config.api_key}"
+
+            try:
+                result = proxy.fetch(target_url=full_url, method="GET")
+                solution = result.get("solution", {})
+                html_response = solution.get("response", "")
+                status_code = solution.get("status", 500)
+                
+                # Mock a requests.Response object so the rest of the class doesn't crash
+                mock_resp = Response()
+                mock_resp.status_code = status_code
+                mock_resp._content = html_response.encode('utf-8')
+                return mock_resp
+                
+            except Exception as e:
+                 log.error(f"Decypharr Proxy Failed: {e}. Falling back to native request.")
+                 # Fallthrough to native session if proxy crashes
+
+        log.debug("Using native requests Session for indexer")
         with Session() as session:
             return session.get(
                 url=url,

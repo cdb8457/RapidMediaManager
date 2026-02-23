@@ -14,9 +14,9 @@ export default defineConfig({
 			interval: 100 // Check for changes every 100ms
 		},
 		proxy: {
-			// Proxy API requests to backend container
+			// Proxy API requests to backend container or local backend
 			'/api': {
-				target: 'http://mediamanager:8000',
+				target: 'http://127.0.0.1:5049',
 				changeOrigin: true
 			}
 		}

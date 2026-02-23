@@ -4,6 +4,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { getContext } from 'svelte';
 	import UserSettings from '$lib/components/user-settings.svelte';
+	import EngineSettingsComponent from '$lib/components/engine-settings.svelte';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
@@ -54,6 +55,18 @@
 			<UserSettings />
 		</Card.Content>
 	</Card.Root>
+	<Card.Root id="engine">
+		<Card.Header>
+			<Card.Title>Engine Configuration</Card.Title>
+			<Card.Description
+				>Manage API tokens and proxy connections for the Rapid Engine.</Card.Description
+			>
+		</Card.Header>
+		<Card.Content>
+			<EngineSettingsComponent />
+		</Card.Content>
+	</Card.Root>
+
 	{#if currentUser().is_superuser}
 		<Card.Root id="users">
 			<Card.Header>

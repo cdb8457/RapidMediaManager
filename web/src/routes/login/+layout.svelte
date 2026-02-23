@@ -1,23 +1,25 @@
 <script lang="ts">
-	import logo from '$lib/images/logo.svg';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 
-	import background from '$lib/images/pawel-czerwinski-NTYYL9Eb9y8-unsplash.jpg?enhanced';
 	import { PUBLIC_VERSION } from '$env/static/public';
 	import { resolve } from '$app/paths';
 
 	let { children } = $props();
 </script>
 
-<div class="grid min-h-svh lg:grid-cols-2">
-	<div class="flex flex-col gap-4 p-6 md:p-10">
+<div class="flex min-h-svh items-center justify-center p-6 md:p-10">
+	<div class="flex w-full max-w-sm flex-col gap-8">
 		<header class="flex justify-center gap-2 md:justify-start">
 			<a class="flex items-center gap-2" href={resolve('/', {})}>
 				<div class="flex size-16 items-center justify-center rounded-md text-primary-foreground">
-					<img alt="MediaManager Logo" class="size-12" src={logo} />
+					<img
+						alt="Rapid Engine Logo"
+						class="size-16 rounded-md object-cover"
+						src="/rapid_engine_logo.png"
+					/>
 				</div>
 				<div>
-					<h1 class="text-2xl font-bold">Media Manager</h1>
+					<h1 class="text-2xl font-bold">Rapid Engine</h1>
 					<span class="truncate text-xs">{PUBLIC_VERSION}</span>
 				</div>
 			</a>
@@ -46,21 +48,7 @@
 					>Donate</a
 				>
 				<Separator class="h-4" orientation="vertical" />
-				<a
-					target="_blank"
-					class="underline"
-					href="https://unsplash.com/photos/blue-white-and-red-abstract-painting-NTYYL9Eb9y8"
-				>
-					Image Credit
-				</a>
 			</footer>
 		</div>
-	</div>
-	<div class="relative hidden lg:block">
-		<enhanced:img
-			src={background}
-			alt="background"
-			class="absolute inset-0 h-full w-full rounded-l-3xl object-cover dark:brightness-[0.8]"
-		/>
 	</div>
 </div>

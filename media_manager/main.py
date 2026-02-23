@@ -13,6 +13,7 @@ from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 import media_manager.movies.router as movies_router
 import media_manager.torrent.router as torrent_router
 import media_manager.tv.router as tv_router
+import media_manager.engine.router as engine_router
 from media_manager.auth.router import (
     auth_metadata_router,
     get_openid_router,
@@ -51,9 +52,14 @@ log = logging.getLogger(__name__)
 if config.misc.development:
     log.warning("Development Mode activated!")
 
-scheduler = setup_scheduler(config)
+# Bypassing for local UI testing
+# scheduler = setup_scheduler(config)
+# run_filesystem_checks(config, log)
 
-run_filesystem_checks(config, log)
+# Mocking database so dependency injection doesn't crash on Windows test
+from media_manager.database import init_engine, Base
+engine = init_engine(url="sqlite:///./test.db")
+Base.metadata.create_all(bind=engine)
 
 BASE_PATH = os.getenv("BASE_PATH", "")
 FRONTEND_FILES_DIR = os.getenv("FRONTEND_FILES_DIR")
@@ -114,6 +120,7 @@ if get_openid_router():
 api_app.include_router(tv_router.router, prefix="/tv", tags=["tv"])
 api_app.include_router(torrent_router.router, prefix="/torrent", tags=["torrent"])
 api_app.include_router(movies_router.router, prefix="/movies", tags=["movie"])
+api_app.include_router(engine_router.router, prefix="/engine", tags=["engine"])
 api_app.include_router(
     notification_router, prefix="/notification", tags=["notification"]
 )

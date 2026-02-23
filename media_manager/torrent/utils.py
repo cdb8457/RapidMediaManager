@@ -6,8 +6,14 @@ import shutil
 from pathlib import Path, UnsupportedOperation
 
 import bencoder
-import libtorrent
 import patoolib
+try:
+    import libtorrent
+except ImportError as e:
+    libtorrent = None
+    log = logging.getLogger(__name__)
+    log.warning(f"Failed to import libtorrent: {e}. Magnet parsing will fallback to regex.")
+
 import requests
 from requests.exceptions import InvalidSchema
 
@@ -140,7 +146,15 @@ def get_torrent_hash(torrent: IndexerQueryResult) -> str:
     if torrent.download_url.startswith("magnet:"):
         log.info(f"Parsing torrent with magnet URL: {torrent.title}")
         log.debug(f"Magnet URL: {torrent.download_url}")
-        torrent_hash = str(libtorrent.parse_magnet_uri(torrent.download_url).info_hash)
+        if libtorrent:
+            torrent_hash = str(libtorrent.parse_magnet_uri(torrent.download_url).info_hash)
+        else:
+            # Fallback regex parsing if libtorrent is missing
+            match = re.search(r"xt=urn:btih:([a-zA-Z0-9]+)", torrent.download_url, re.IGNORECASE)
+            if match:
+                torrent_hash = match.group(1).lower()
+            else:
+                raise ValueError("Could not extract info_hash from magnet URL using regex.")
     else:
         # downloading the torrent file
         log.info(f"Downloading .torrent file of torrent: {torrent.title}")
@@ -155,7 +169,13 @@ def get_torrent_hash(torrent: IndexerQueryResult) -> str:
                 session=requests.Session(),
                 timeout=MediaManagerConfig().indexers.prowlarr.timeout_seconds,
             )
-            return str(libtorrent.parse_magnet_uri(final_url).info_hash)
+            if libtorrent:
+                return str(libtorrent.parse_magnet_uri(final_url).info_hash)
+            else:
+                match = re.search(r"xt=urn:btih:([a-zA-Z0-9]+)", final_url, re.IGNORECASE)
+                if match:
+                    return match.group(1).lower()
+                raise ValueError("Could not extract info_hash from redirected magnet URL.")
         except Exception as e:
             log.error(f"Failed to download torrent file: {e}")
             raise

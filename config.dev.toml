@@ -113,6 +113,9 @@ port = 8080
 api_key = ""
 base_path = "/api"
 
+[torrents.real_debrid]
+enabled = true
+api_key = "test_token_12345"
 [indexers]
 # Prowlarr settings
 [indexers.prowlarr]
@@ -167,6 +170,10 @@ libraries = ["ALL_MOVIES"]
 rule_names = ["prefer_h265", "avoid_cam", "reject_non_freeleech"]
 
 # its very unlikely that you need to change this
+
+[indexers.decypharr]
+enabled = false
+url = ""
 [metadata]
 [metadata.tmdb]
 tmdb_relay_url = "https://metadata-relay.dorninger.co/tmdb"

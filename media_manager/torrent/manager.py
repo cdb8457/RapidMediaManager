@@ -11,6 +11,7 @@ from media_manager.torrent.download_clients.sabnzbd import SabnzbdDownloadClient
 from media_manager.torrent.download_clients.transmission import (
     TransmissionDownloadClient,
 )
+from media_manager.torrent.download_clients.real_debrid import RealDebridDownloadClient
 from media_manager.torrent.schemas import Torrent, TorrentStatus
 
 log = logging.getLogger(__name__)
@@ -37,21 +38,26 @@ class DownloadManager:
         self._initialize_clients()
 
     def _initialize_clients(self) -> None:
-        """Initialize and register the default download clients"""
+        # If Real-Debrid is enabled, it overrides local torrent clients completely
+        if self.config.real_debrid.enabled:
+             try:
+                 self._torrent_client = RealDebridDownloadClient()
+             except Exception as e:
+                 log.error(f"Failed to initialize Real-Debrid client: {e}")
+        else:
+            # Initialize local torrent clients (prioritize qBittorrent, fallback to Transmission)
+            if self.config.qbittorrent.enabled:
+                try:
+                    self._torrent_client = QbittorrentDownloadClient()
+                except Exception as e:
+                    log.error(f"Failed to initialize qBittorrent client: {e}")
 
-        # Initialize torrent clients (prioritize qBittorrent, fallback to Transmission)
-        if self.config.qbittorrent.enabled:
-            try:
-                self._torrent_client = QbittorrentDownloadClient()
-            except Exception as e:
-                log.error(f"Failed to initialize qBittorrent client: {e}")
-
-        # If qBittorrent is not available or failed, try Transmission
-        if self._torrent_client is None and self.config.transmission.enabled:
-            try:
-                self._torrent_client = TransmissionDownloadClient()
-            except Exception as e:
-                log.error(f"Failed to initialize Transmission client: {e}")
+            # If qBittorrent is not available or failed, try Transmission
+            if self._torrent_client is None and self.config.transmission.enabled:
+                try:
+                    self._torrent_client = TransmissionDownloadClient()
+                except Exception as e:
+                    log.error(f"Failed to initialize Transmission client: {e}")
 
         # Initialize SABnzbd client for usenet
         if self.config.sabnzbd.enabled:

@@ -250,7 +250,7 @@ def update_movie_request(
     return movie_service.update_movie_request(movie_request=movie_request)
 
 
-@router.patch("/requests/{movie_request_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.patch("/requests/{movie_request_id}", status_code=status.HTTP_200_OK)
 def authorize_request(
     movie_service: movie_service_dep,
     movie_request_id: MovieRequestId,

@@ -33,7 +33,14 @@ class SabnzbdConfig(BaseSettings):
     base_path: str = "/api"
 
 
+class RealDebridConfig(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="REAL_DEBRID_")
+    enabled: bool = False
+    api_key: str = ""
+
+
 class TorrentConfig(BaseSettings):
     qbittorrent: QbittorrentConfig = QbittorrentConfig()
     transmission: TransmissionConfig = TransmissionConfig()
     sabnzbd: SabnzbdConfig = SabnzbdConfig()
+    real_debrid: RealDebridConfig = RealDebridConfig()

@@ -113,6 +113,11 @@ port = 8080
 api_key = ""
 base_path = "/api"
 
+# Real-Debrid settings
+[torrents.real_debrid]
+enabled = false
+api_key = ""
+
 [indexers]
 # Prowlarr settings
 [indexers.prowlarr]
@@ -128,6 +133,11 @@ url = "http://localhost:9117"
 api_key = ""
 indexers = ["1337x", "torrentleech"]  # List of indexer names to use
 timeout_seconds = 60
+
+# Decypharr (Flaresolverr) Proxy settings
+[indexers.decypharr]
+enabled = false
+url = "http://localhost:8191"
 
 # Title-based scoring rules
 [[indexers.title_scoring_rules]]

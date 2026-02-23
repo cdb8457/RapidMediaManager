@@ -54,28 +54,28 @@
 	}
 </script>
 
-<Card.Root class="col-span-full flex h-full flex-col overflow-x-hidden sm:col-span-1">
-	<Card.Header>
-		<Card.Title class="flex h-12 items-center leading-tight">
+<Card.Root class="flex h-[350px] w-full flex-col overflow-hidden">
+	<Card.Header class="p-4 pb-2">
+		<Card.Title class="truncate text-base leading-tight">
 			{result.name}
 			{#if result.year != null}
-				({result.year})
+				<span class="text-sm font-normal text-muted-foreground">({result.year})</span>
 			{/if}
 		</Card.Title>
-		<Card.Description class="truncate"
+		<Card.Description class="line-clamp-2 text-xs"
 			>{result.overview !== '' ? result.overview : 'No overview available'}</Card.Description
 		>
 	</Card.Header>
-	<Card.Content class="flex flex-1 items-center justify-center">
+	<Card.Content class="flex flex-1 items-center justify-center overflow-hidden p-0 px-4 pb-2">
 		{#if result.poster_path != null}
 			<img
-				class="h-full w-full rounded-lg object-contain"
+				class="h-full w-full rounded-md object-cover"
 				src={result.poster_path}
 				alt="{result.name}'s Poster Image"
 			/>
 		{:else}
-			<div class="flex h-full w-full items-center justify-center">
-				<ImageOff class="h-12 w-12 text-gray-400" />
+			<div class="flex h-full w-full items-center justify-center rounded-md bg-muted/20">
+				<ImageOff class="h-8 w-8 text-muted-foreground/50" />
 			</div>
 		{/if}
 	</Card.Content>

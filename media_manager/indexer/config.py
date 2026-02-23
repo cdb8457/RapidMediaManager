@@ -16,6 +16,11 @@ class JackettConfig(BaseSettings):
     timeout_seconds: int = 60
 
 
+class DecypharrConfig(BaseSettings):
+    enabled: bool = False
+    url: str = "http://localhost:8191"
+
+
 class ScoringRule(BaseSettings):
     name: str
     score_modifier: int = 0
@@ -39,6 +44,7 @@ class ScoringRuleSet(BaseSettings):
 class IndexerConfig(BaseSettings):
     prowlarr: ProwlarrConfig = ProwlarrConfig()
     jackett: JackettConfig = JackettConfig()
+    decypharr: DecypharrConfig = DecypharrConfig()
     title_scoring_rules: list[TitleScoringRule] = []
     indexer_flag_scoring_rules: list[IndexerFlagScoringRule] = []
     scoring_rule_sets: list[ScoringRuleSet] = []

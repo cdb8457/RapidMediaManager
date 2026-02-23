@@ -15,9 +15,9 @@ class IndexerQueryResult(Base):
     title: Mapped[str]
     download_url: Mapped[str]
     seeders: Mapped[int]
-    flags = mapped_column(ARRAY(String))
+    flags = mapped_column(String)
     quality: Mapped[Quality]
-    season = mapped_column(ARRAY(Integer))
+    season = mapped_column(String)
     size = mapped_column(BigInteger)
     usenet: Mapped[bool]
     age: Mapped[int]

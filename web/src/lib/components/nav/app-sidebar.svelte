@@ -1,14 +1,5 @@
 <script lang="ts" module>
-	import {
-		Bell,
-		CircleDollarSign,
-		Clapperboard,
-		Home,
-		Info,
-		LifeBuoy,
-		Settings,
-		TvIcon
-	} from 'lucide-svelte';
+	import { Bell, Database, Home, Info, LifeBuoy, Settings, ListVideo } from 'lucide-svelte';
 	import { resolve } from '$app/paths';
 
 	import { PUBLIC_VERSION } from '$env/static/public';
@@ -20,68 +11,33 @@
 				url: resolve('/dashboard', {}),
 				icon: Home,
 				isActive: true
-			},
-			{
-				title: 'TV',
-				url: resolve('/dashboard/tv', {}),
-				icon: TvIcon,
-				isActive: true,
-				items: [
-					{
-						title: 'Add a show',
-						url: resolve('/dashboard/tv/add-show', {})
-					},
-					{
-						title: 'Torrents',
-						url: resolve('/dashboard/tv/torrents', {})
-					},
-					{
-						title: 'Requests',
-						url: resolve('/dashboard/tv/requests', {})
-					}
-				]
-			},
-			{
-				title: 'Movies',
-				url: resolve('/dashboard/movies', {}),
-				icon: Clapperboard,
-				isActive: true,
-				items: [
-					{
-						title: 'Add a movie',
-						url: resolve('/dashboard/movies/add-movie', {})
-					},
-					{
-						title: 'Torrents',
-						url: resolve('/dashboard/movies/torrents', {})
-					},
-					{
-						title: 'Requests',
-						url: resolve('/dashboard/movies/requests', {})
-					}
-				]
 			}
 		],
 		navSecondary: [
+			{
+				title: 'Seerr Requests',
+				url: resolve('/dashboard/requests', {}),
+				icon: ListVideo
+			},
+			{
+				title: 'Debrid Cache',
+				url: resolve('/dashboard/transfers', {}),
+				icon: Database
+			},
 			{
 				title: 'Notifications',
 				url: resolve('/dashboard/notifications', {}),
 				icon: Bell
 			},
 			{
-				title: 'Settings',
-				url: resolve('/dashboard/settings', {}),
-				icon: Settings
-			},
-			{
-				title: 'Support',
-				url: 'https://github.com/maxdorninger/MediaManager/issues',
+				title: 'Documentation',
+				url: 'https://github.com/your-org/RapidMediaManager',
 				icon: LifeBuoy
 			},
 			{
-				title: 'Donate',
-				url: 'https://github.com/sponsors/maxdorninger',
-				icon: CircleDollarSign
+				title: 'Settings',
+				url: resolve('/dashboard/settings', {}),
+				icon: Settings
 			},
 			{
 				title: 'About',
@@ -98,7 +54,6 @@
 	import NavUser from '$lib/components/nav/nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
-	import logo from '$lib/images/logo.svg';
 
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
@@ -109,11 +64,15 @@
 			<Sidebar.MenuItem>
 				<Sidebar.MenuButton size="lg">
 					{#snippet child({ props })}
-						<a href={resolve('/dashboard', {})} {...props}>
-							<img class="size-12" src={logo} alt="Media Manager Logo" />
+						<a href={resolve('/dashboard', {})} {...props} class="flex items-center gap-2">
+							<img
+								class="size-10 rounded-md object-cover"
+								src="/rapid_engine_logo.png"
+								alt="Rapid Engine Logo"
+							/>
 							<div class="grid flex-1 text-left text-sm leading-tight">
-								<span class="truncate font-semibold">Media Manager</span>
-								<span class="truncate text-xs">{PUBLIC_VERSION}</span>
+								<span class="truncate font-semibold">Rapid Engine</span>
+								<span class="truncate text-xs">Admin Control Panel</span>
 							</div>
 						</a>
 					{/snippet}

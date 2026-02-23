@@ -63,14 +63,21 @@ def init_engine(
                 db_config.dbname,
             )
 
-    engine = create_engine(
-        url,
-        echo=False,
-        pool_size=10,
-        max_overflow=10,
-        pool_timeout=30,
-        pool_recycle=1800,
-    )
+    if str(url).startswith("sqlite"):
+        engine = create_engine(
+            url,
+            echo=False,
+            connect_args={"check_same_thread": False}
+        )
+    else:
+        engine = create_engine(
+            url,
+            echo=False,
+            pool_size=10,
+            max_overflow=10,
+            pool_timeout=30,
+            pool_recycle=1800,
+        )
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     log.debug("SQLAlchemy engine initialized")
     return engine

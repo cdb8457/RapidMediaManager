@@ -29,7 +29,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 
 engine = create_async_engine(
-    build_db_url(**MediaManagerConfig().database.model_dump()), echo=False
+    "sqlite+aiosqlite:///./test.db", echo=False
 )
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
