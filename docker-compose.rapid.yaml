@@ -1,0 +1,48 @@
+services:
+  rapidengine:
+    container_name: rapidengine_server
+    # Since we are using a custom fork, we build the image locally from our source code
+    build: https://github.com/cdb8457/RapidMediaManager.git#master
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - CONFIG_DIR=/app/config
+    volumes:
+      # Mount your actual media directories here
+      - ./data/:/data/
+      # Config folder for application configuration
+      - ./config/:/app/config/
+      # Image folder
+      - ./images/:/data/images/
+    depends_on:
+      db:
+        condition: service_healthy
+      flaresolverr:
+        condition: service_started
+
+  db:
+    container_name: rapidengine_postgres
+    image: postgres:17
+    restart: unless-stopped
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_USER: MediaManager
+      POSTGRES_DB: MediaManager
+      POSTGRES_PASSWORD: MediaManager
+
+  # Decypharr Scraper Proxy
+  flaresolverr:
+    container_name: rapidengine_flaresolverr
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    restart: unless-stopped
+    ports:
+      - "8191:8191"
+    environment:
+      - LOG_LEVEL=info
