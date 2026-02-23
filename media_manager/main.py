@@ -56,10 +56,6 @@ if config.misc.development:
 # scheduler = setup_scheduler(config)
 # run_filesystem_checks(config, log)
 
-# Mocking database so dependency injection doesn't crash on Windows test
-from media_manager.database import init_engine, Base
-engine = init_engine(url="sqlite:///./test.db")
-Base.metadata.create_all(bind=engine)
 
 BASE_PATH = os.getenv("BASE_PATH", "")
 FRONTEND_FILES_DIR = os.getenv("FRONTEND_FILES_DIR")

@@ -28,8 +28,12 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     )
 
 
+db_config = MediaManagerConfig().database
+# We use postgresql+psycopg which natively supports async in SQLAlchemy 2.0+
+db_url = f"postgresql+psycopg://{db_config.user}:{db_config.password}@{db_config.host}:{db_config.port}/{db_config.dbname}"
+
 engine = create_async_engine(
-    "sqlite+aiosqlite:///./test.db", echo=False
+    db_url, echo=False
 )
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
