@@ -55,6 +55,7 @@ class MediaManagerConfig(BaseSettings):
         case_sensitive=False,
         env_nested_delimiter="__",
         env_prefix="MEDIAMANAGER_",
+        extra="ignore",
     )
     """
     This class is used to load all configurations from the environment variables.
