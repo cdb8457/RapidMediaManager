@@ -54,6 +54,7 @@
 	import NavUser from '$lib/components/nav/nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
+	import { base } from '$app/paths';
 
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
@@ -67,7 +68,7 @@
 						<a href={resolve('/dashboard', {})} {...props} class="flex items-center gap-2">
 							<img
 								class="size-10 rounded-md object-cover"
-								src="/rapid_engine_logo.png"
+								src="{base}/rapid_engine_logo.png"
 								alt="Rapid Engine Logo"
 							/>
 							<div class="grid flex-1 text-left text-sm leading-tight">
