@@ -16,9 +16,9 @@
 	async function loadRequests() {
 		isLoading = true;
 		try {
-			const { error, response } = await client.GET('/api/v1/engine/seerr/requests', {});
+			const { data, error } = await client.GET('/api/v1/engine/seerr/requests', {});
 			if (error) throw error;
-			requests = response.data?.results || [];
+			requests = data?.results || [];
 		} catch (e) {
 			toast.error('Failed to load Seerr requests. Check your Engine settings.');
 			console.error(e);

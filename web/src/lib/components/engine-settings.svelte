@@ -22,10 +22,9 @@
 
 	onMount(async () => {
 		try {
-			const { error, response } = await client.GET('/api/v1/engine/settings', {});
+			const { data, error } = await client.GET('/api/v1/engine/settings', {});
 			if (error) throw error;
 
-			const data = response.data;
 			if (data) {
 				rdEnabled = data.real_debrid?.enabled ?? false;
 				rdApiKey = data.real_debrid?.api_key ?? '';
