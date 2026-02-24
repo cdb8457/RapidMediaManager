@@ -6,7 +6,7 @@ import logging
 import os
 import tomlkit
 
-from media_manager.config import MediaManagerConfig
+from media_manager.config import MediaManagerConfig, config_path as GLOBAL_CONFIG_PATH
 from media_manager.torrent.download_clients.real_debrid_api import RealDebridAPI
 from media_manager.indexer.flaresolverr_proxy import FlaresolverrAPI
 from media_manager.metadataProvider.dependencies import metadata_provider_dep
@@ -288,9 +288,7 @@ async def get_engine_settings() -> EngineSettings:
     """
     Returns the current configurations for the Engine.
     """
-    config_path = os.getenv("CONFIG_FILE")
-    if not config_path:
-        config_path = "/app/config/config.toml"
+    config_path = GLOBAL_CONFIG_PATH
         
     try:
         with open(config_path, "r", encoding="utf-8") as f:
@@ -328,9 +326,7 @@ async def update_engine_settings(settings: EngineSettings) -> EngineSettings:
     """
     Updates the physical TOML configuration file with the new settings.
     """
-    config_path = os.getenv("CONFIG_FILE")
-    if not config_path:
-        config_path = "/app/config/config.toml"
+    config_path = GLOBAL_CONFIG_PATH
         
     try:
         # Gracefully handle empty docker volume mounts by creating a new document if missing
