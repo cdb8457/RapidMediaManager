@@ -122,13 +122,13 @@
 							<TableBody>
 								{#if loadingWebhooks}
 									<TableRow>
-										<TableCell colSpan={4} class="h-24 text-center text-muted-foreground">
+										<TableCell colspan={4} class="h-24 text-center text-muted-foreground">
 											Loading...
 										</TableCell>
 									</TableRow>
 								{:else if webhooks.length === 0}
 									<TableRow>
-										<TableCell colSpan={4} class="h-24 text-center text-muted-foreground">
+										<TableCell colspan={4} class="h-24 text-center text-muted-foreground">
 											No webhooks received yet.
 										</TableCell>
 									</TableRow>
@@ -184,13 +184,13 @@
 							<TableBody>
 								{#if loadingTransfers}
 									<TableRow>
-										<TableCell colSpan={4} class="h-24 text-center text-muted-foreground">
+										<TableCell colspan={4} class="h-24 text-center text-muted-foreground">
 											Loading...
 										</TableCell>
 									</TableRow>
 								{:else if activeTransfers.length === 0}
 									<TableRow>
-										<TableCell colSpan={4} class="h-24 text-center text-muted-foreground">
+										<TableCell colspan={4} class="h-24 text-center text-muted-foreground">
 											No active transfers.
 										</TableCell>
 									</TableRow>

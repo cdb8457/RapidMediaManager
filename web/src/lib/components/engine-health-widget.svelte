@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardHeader,
+		CardTitle
+	} from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
 	import { onMount } from 'svelte';
 	import client from '$lib/api';
@@ -27,16 +33,16 @@
 		try {
 			// @ts-ignore: Endpoint not in generated OpenAPI spec yet
 			const res = await client.GET('/api/v1/engine/health');
-			health = res.data as EngineHealth;
+			health = res.data as any as EngineHealth;
 		} catch (e) {
-			console.error("Failed to fetch engine health", e);
+			console.error('Failed to fetch engine health', e);
 		} finally {
 			loading = false;
 		}
 	});
 </script>
 
-<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-2 mb-8">
+<div class="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-2">
 	<!-- Real-Debrid Status -->
 	<Card>
 		<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -47,7 +53,7 @@
 			{#if loading}
 				<div class="text-2xl font-bold text-muted-foreground">Checking...</div>
 			{:else if health}
-				<div class="flex items-center gap-2 mb-1">
+				<div class="mb-1 flex items-center gap-2">
 					{#if health.real_debrid.status === 'online'}
 						<Badge variant="default" class="bg-green-600 hover:bg-green-700">Online</Badge>
 					{:else if health.real_debrid.status === 'error'}
@@ -56,7 +62,7 @@
 						<Badge variant="secondary">Offline</Badge>
 					{/if}
 				</div>
-				<p class="text-xs text-muted-foreground mt-2">
+				<p class="mt-2 text-xs text-muted-foreground">
 					{health.real_debrid.message}
 				</p>
 			{/if}
@@ -73,7 +79,7 @@
 			{#if loading}
 				<div class="text-2xl font-bold text-muted-foreground">Checking...</div>
 			{:else if health}
-				<div class="flex items-center gap-2 mb-1">
+				<div class="mb-1 flex items-center gap-2">
 					{#if health.decypharr.status === 'online'}
 						<Badge variant="default" class="bg-green-600 hover:bg-green-700">Online</Badge>
 					{:else if health.decypharr.status === 'error'}
@@ -82,7 +88,7 @@
 						<Badge variant="secondary">Offline</Badge>
 					{/if}
 				</div>
-				<p class="text-xs text-muted-foreground mt-2">
+				<p class="mt-2 text-xs text-muted-foreground">
 					{health.decypharr.message}
 				</p>
 			{/if}

@@ -1016,3 +1016,17 @@
 {"timestamp": "2026-02-23T18:53:34.298Z", "level": "INFO", "module": "uvicorn.access", "message": "127.0.0.1:61062 - \"GET /api/v1/engine/settings HTTP/1.1\" 200"}
 {"timestamp": "2026-02-23T18:53:34.298Z", "level": "INFO", "module": "uvicorn.access", "message": "127.0.0.1:61062 - \"GET /api/v1/engine/settings HTTP/1.1\" 200"}
 {"timestamp": "2026-02-23T18:53:34.298Z", "level": "INFO", "module": "uvicorn.access", "message": "127.0.0.1:61062 - \"GET /api/v1/engine/settings HTTP/1.1\" 200"}
+{"timestamp": "2026-02-24T12:11:33.584Z", "level": "WARNING", "module": "media_manager.main", "message": "Development Mode activated!"}
+{"timestamp": "2026-02-24T12:11:33.584Z", "level": "INFO", "module": "media_manager.main", "message": "Hello World!"}
+{"timestamp": "2026-02-24T12:11:33.584Z", "level": "INFO", "module": "media_manager.main", "message": "CORS URLs activated for following origins: ['http://localhost:8000', 'http://localhost:5173', 'http://mediamanager:8000']"}
+{"timestamp": "2026-02-24T12:11:33.720Z", "level": "INFO", "module": "uvicorn.error", "message": "Started server process [79200]", "color_message": "Started server process [\u001b[36m%d\u001b[0m]"}
+{"timestamp": "2026-02-24T12:11:33.720Z", "level": "INFO", "module": "uvicorn.error", "message": "Waiting for application startup."}
+{"timestamp": "2026-02-24T12:11:33.720Z", "level": "INFO", "module": "uvicorn.error", "message": "Application startup complete."}
+{"timestamp": "2026-02-24T12:11:33.721Z", "level": "INFO", "module": "uvicorn.error", "message": "Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)", "color_message": "Uvicorn running on \u001b[1m%s://%s:%d\u001b[0m (Press CTRL+C to quit)"}
+{"timestamp": "2026-02-24T12:11:41.639Z", "level": "INFO", "module": "uvicorn.access", "message": "127.0.0.1:57760 - \"GET /api/v1/openapi.json HTTP/1.1\" 404"}
+{"timestamp": "2026-02-24T12:23:06.303Z", "level": "WARNING", "module": "media_manager.main", "message": "Development Mode activated!"}
+{"timestamp": "2026-02-24T12:23:06.303Z", "level": "INFO", "module": "media_manager.main", "message": "Hello World!"}
+{"timestamp": "2026-02-24T12:23:06.303Z", "level": "INFO", "module": "media_manager.main", "message": "CORS URLs activated for following origins: ['http://localhost:8000', 'http://localhost:5173', 'http://mediamanager:8000']"}
+{"timestamp": "2026-02-24T12:28:32.885Z", "level": "WARNING", "module": "media_manager.main", "message": "Development Mode activated!"}
+{"timestamp": "2026-02-24T12:28:32.885Z", "level": "INFO", "module": "media_manager.main", "message": "Hello World!"}
+{"timestamp": "2026-02-24T12:28:32.885Z", "level": "INFO", "module": "media_manager.main", "message": "CORS URLs activated for following origins: ['http://localhost:8000', 'http://localhost:5173', 'http://mediamanager:8000']"}

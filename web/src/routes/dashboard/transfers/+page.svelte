@@ -17,9 +17,9 @@
 	async function loadTorrents() {
 		isLoading = true;
 		try {
-			const { error, response } = await client.GET('/api/v1/engine/torrents', {});
+			const { data, error } = await client.GET('/api/v1/engine/torrents', {});
 			if (error) throw error;
-			torrents = response.data || [];
+			torrents = data || [];
 		} catch (e) {
 			toast.error('Failed to load Debrid cache');
 			console.error(e);
@@ -36,11 +36,7 @@
 		if (isDeleting) return;
 		isDeleting = true;
 		try {
-			const { error } = await client.DELETE('/api/v1/engine/torrents/{torrent_id}', {
-				params: {
-					path: { torrent_id: id }
-				}
-			});
+			const { error } = await client.DELETE(`/api/v1/engine/torrents/${id}` as any, {});
 			if (error) throw error;
 			toast.success('Torrent deleted from Real-Debrid cache.');
 			loadTorrents(); // refresh the list

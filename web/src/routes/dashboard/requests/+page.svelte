@@ -10,6 +10,8 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { resolve } from '$app/paths';
 
+	import type { components } from '$lib/api/api';
+
 	let requests: any[] = $state([]);
 	let isLoading = $state(true);
 
@@ -18,7 +20,7 @@
 		try {
 			const { data, error } = await client.GET('/api/v1/engine/seerr/requests', {});
 			if (error) throw error;
-			requests = data?.results || [];
+			requests = (data?.results as any[]) || [];
 		} catch (e) {
 			toast.error('Failed to load Seerr requests. Check your Engine settings.');
 			console.error(e);
