@@ -333,8 +333,13 @@ async def update_engine_settings(settings: EngineSettings) -> EngineSettings:
         config_path = "/app/config/config.toml"
         
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            doc = tomlkit.parse(f.read())
+        # Gracefully handle empty docker volume mounts by creating a new document if missing
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                doc = tomlkit.parse(f.read())
+        except FileNotFoundError:
+            log.warning(f"Config file not found at {config_path}. Creating a new one.")
+            doc = tomlkit.document()
             
         if "torrents" not in doc:
             doc["torrents"] = tomlkit.table()
@@ -360,12 +365,15 @@ async def update_engine_settings(settings: EngineSettings) -> EngineSettings:
         doc["services"]["seerr"]["url"] = settings.seerr.url
         doc["services"]["seerr"]["api_key"] = settings.seerr.api_key
         
+        # Ensure the parent directory actually exists before writing
+        os.makedirs(os.path.dirname(config_path), exist_ok=True)
+        
         with open(config_path, "w", encoding="utf-8") as f:
             f.write(tomlkit.dumps(doc))
             
     except Exception as e:
         log.error(f"Failed to write config file: {e}")
-        raise HTTPException(status_code=500, detail="Could not save configuration file.")
+        raise HTTPException(status_code=500, detail=f"Could not save configuration file: {e}")
         
     return settings
 
