@@ -22,7 +22,14 @@
 
 	onMount(async () => {
 		try {
-			const { data, error } = await client.GET('/api/v1/engine/settings', {});
+			const { data, error } = await client.GET('/api/v1/engine/settings', {
+				// Prevent browser caching the GET request on SPA navigation
+				cache: 'no-store',
+				headers: {
+					'Cache-Control': 'no-cache',
+					Pragma: 'no-cache'
+				}
+			});
 			if (error) throw error;
 
 			if (data) {

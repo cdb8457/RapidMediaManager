@@ -18,7 +18,9 @@
 	async function loadRequests() {
 		isLoading = true;
 		try {
-			const { data, error } = await client.GET('/api/v1/engine/seerr/requests', {});
+			const { data, error } = await client.GET('/api/v1/engine/seerr/requests', {
+				cache: 'no-store'
+			});
 			if (error) throw error;
 			requests = (data?.results as any[]) || [];
 		} catch (e) {

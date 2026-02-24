@@ -35,7 +35,7 @@
 	onMount(async () => {
 		try {
 			// @ts-ignore: Endpoint not in generated OpenAPI spec yet
-			const res = await client.GET('/api/v1/engine/webhooks');
+			const res = await client.GET('/api/v1/engine/webhooks', { cache: 'no-store' });
 			if (res.data) {
 				webhooks = res.data as any[];
 			}
@@ -47,7 +47,7 @@
 
 		try {
 			// @ts-ignore: Endpoint not in generated OpenAPI spec yet
-			const res = await client.GET('/api/v1/engine/transfers');
+			const res = await client.GET('/api/v1/engine/transfers', { cache: 'no-store' });
 			if (res.data) {
 				activeTransfers = res.data as any[];
 			}

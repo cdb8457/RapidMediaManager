@@ -17,7 +17,7 @@
 	async function loadTorrents() {
 		isLoading = true;
 		try {
-			const { data, error } = await client.GET('/api/v1/engine/torrents', {});
+			const { data, error } = await client.GET('/api/v1/engine/torrents', { cache: 'no-store' });
 			if (error) throw error;
 			torrents = data || [];
 		} catch (e) {
