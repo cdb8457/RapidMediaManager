@@ -14,6 +14,8 @@ import media_manager.movies.router as movies_router
 import media_manager.torrent.router as torrent_router
 import media_manager.tv.router as tv_router
 import media_manager.engine.router as engine_router
+import media_manager.engine.proxy_torznab as proxy_torznab
+import media_manager.engine.proxy_qbittorrent as proxy_qbittorrent
 from media_manager.auth.router import (
     auth_metadata_router,
     get_openid_router,
@@ -55,6 +57,9 @@ if config.misc.development:
 # Bypassing for local UI testing
 # scheduler = setup_scheduler(config)
 # run_filesystem_checks(config, log)
+
+from media_manager.database import init_engine
+init_engine(config.database)
 
 
 BASE_PATH = os.getenv("BASE_PATH", "")
@@ -120,6 +125,7 @@ api_app.include_router(engine_router.router, prefix="/engine", tags=["engine"])
 api_app.include_router(
     notification_router, prefix="/notification", tags=["notification"]
 )
+api_app.include_router(proxy_torznab.router, prefix="/engine/proxy/torznab", tags=["proxy"])
 
 # serve static image files
 app.mount(
@@ -128,6 +134,7 @@ app.mount(
     name="static-images",
 )
 app.include_router(api_app)
+app.include_router(proxy_qbittorrent.router, prefix="/api/v2", tags=["proxy"])
 
 # handle static frontend files
 if not DISABLE_FRONTEND_MOUNT:
